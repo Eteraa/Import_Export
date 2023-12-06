@@ -35,6 +35,8 @@ include "db_conn.php";
           <th scope="col">Name</th>
           <th scope="col">Price</th>
           <th scope="col">Description</th>
+          <th scope="col">Create Date</th>
+          <th scope="col">Update Date </th>
         </tr>
       </thead>
       <tbody>
@@ -50,6 +52,8 @@ include "db_conn.php";
             <td><?php echo $row["p_name"] ?></td>
             <td><?php echo $row["p_price"] ?></td>
             <td><?php echo $row["p_description"] ?></td>
+            <td><?php echo $row["create_date"] ?></td>
+            <td><?php echo $row["update_date"] ?></td>
             
           </tr>
         <?php

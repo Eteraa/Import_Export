@@ -11,23 +11,31 @@
             fgetcsv($csvFile);
             
             while(($line = fgetcsv($csvFile)) !== FALSE){
-                
+
                 $id   = $line[0];
                 $p_name  = $line[1];
                 $p_price  = $line[2];
                 $p_description = $line[3];
+                $create_date = $line[4];
+                $update_date = $line[5];
                 
-                $prevQuery = "SELECT id FROM products WHERE id = '".$line[0]."'";
-                $prevResult = $conn->query($prevQuery);
+                $query1 = "SELECT * FROM products WHERE id = '".$id."'";
+                $result1 = $conn->query($query1);
                 
                 
-                if($prevResult->num_rows > 0){
-                    $conn->query("UPDATE products SET p_name = '".$p_name."', p_price = '".$p_price."', p_description = '".$p_description."' WHERE id = '".$id."'");
+                if($result1->num_rows > 0){
+                    $row1 = $result1->fetch_assoc();
+                    if ($row1['p_name'] != $p_name || $row1['p_price'] != $p_price || $row1['p_description'] != $p_description) {
+                         $conn->query("UPDATE products SET p_name = '".$p_name."', p_price = '".$p_price."', p_description = '".$p_description."', update_date = NOW() WHERE id = '".$id."'");
+                    }
+                    else {
+                        echo "";
+                    }
                 }else{
-                    $conn->query("INSERT INTO products (id, p_name, p_price, p_description) VALUES ('".$id."', '".$p_name."', '".$p_price."','".$p_description."')");
+                    $conn->query("INSERT INTO products (id, p_name, p_price, p_description, create_date, update_date) VALUES ('".$id."', '".$p_name."', '".$p_price."','".$p_description."', NOW(), NOW())");
                 }
             }
-            
+
             // Close opened CSV file
             fclose($csvFile);
             
@@ -42,10 +50,7 @@
     else{
         $qstring = '?status=invalid_file';
     
-    }
-    
-
-
+    }   
   
   if(isset($_POST["Export"])){
      
